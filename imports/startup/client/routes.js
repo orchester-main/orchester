@@ -1,20 +1,23 @@
-import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { IronRouter } from 'meteor/iron:router';
 
-import '../../ui/layouts/app-body.html';
-import '../../ui/pages/partner-apply.html'
-import '../../ui/pages/sign-up.js';
+import '../../ui/pages/partner-apply.js';
+import '../../ui/pages/partner-sign-up.js';
 
-FlowRouter.route('/sign-up', {
-  name: 'App.sign-up',
-  action() {
-    BlazeLayout.render('app_body', { main: 'app_signUp' });
-  },
+Router.route('/partner-log-out', function () {
+  Meteor.logout();
+  this.redirect('/partner-portal');
 });
 
-FlowRouter.route('/partner-apply', {
-  name: 'App.partner-apply',
-  action() {
-    BlazeLayout.render('app_body', { main: 'app_partnerApply' });
-  },
+Router.route('/partner-portal', function () {
+  if (!Meteor.user()) {
+    this.render('partnerSignUp');
+  }
+  else {
+    this.render('partnerApply');
+  }
 });
+
+Router.route('/partner-sign-up', function () {
+  this.render('partnerSignUp');
+});
+
